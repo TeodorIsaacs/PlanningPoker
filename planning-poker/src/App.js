@@ -1,63 +1,56 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import socketIOClient from "socket.io-client";
 import "./App.css"
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Room from "./pages/Room";
 import Header from "./components/Header";
 
-export default class App extends Component {
-    state = {
-        rooms: [],
-        clientId: null,
-        endpoint: "http://127.0.0.1:4001",
-        currentRoomUsers: null
-    };
+export default function App() {
 
-    async componentDidMount() {
-        const socket = socketIOClient(this.state.endpoint);
+    const [rooms, setRooms] = useState([])
+    const [clientId, setClientId] = useState(null)
+    const [currentRoom, setCurrentRoom] = useState(null)
 
-        socket.on("RoomsChanged", rooms => this.onReceiveRooms(rooms));
-        socket.on("ReceiveClientID", id => this.onReceiveClientId(id))
-        socket.on("UpdatedRoom", room => this.onReceiveRoomUpdate(room))
-        socket.on("UpdatedVote", user => this.onUpdatedVote(user))
+    const endpoint = "http://127.0.0.1:4001"
 
-        await this.getRooms()
-    }
+    const history = useHistory();
 
-    onReceiveRooms = (rooms) => {
+    useEffect(() => {
+        const socket = socketIOClient(endpoint);
+        socket.on("RoomsChanged", rooms => onReceiveRooms(rooms));
+        socket.on("ReceiveClientID", id => onReceiveClientId(id))
+        socket.on("UpdatedRoom", room => onReceiveRoomUpdate(room))
+        getRooms()
+    }, [])
+
+    function onReceiveRooms(rooms){
         console.log("onReceiveRooms")
-        this.setState({rooms: rooms})
+        setRooms(rooms)
     }
 
-    onReceiveClientId = (id) => {
-        console.log("onReceiveClientId")
-        this.setState({clientId: id})
+    function onReceiveClientId(id){
+        console.log("onReceiveClientId" + clientId)
+        setClientId(id)
     }
 
-    onReceiveRoomUpdate = (room) => {
-        console.log("onReceiveRoomUpdate")
-        this.setState({currentRoomUsers: room})
+    function onReceiveRoomUpdate(room) {
+        console.log("onReceiveRoomUpdate, room: ")
+        setCurrentRoom(room)
     }
 
-    onUpdatedVote = (user) => {
-        console.log(user)
-        let updatedRoomUsers = this.state.currentRoomUsers
-        updatedRoomUsers.find(u => u.clientId === user.clientId).voted = parseInt(user.voted)
-        this.setState({currentRoomUsers: updatedRoomUsers})
-    }
-
-    getRooms = async () => {
-        await fetch(this.state.endpoint + "/rooms")
+    async function getRooms() {
+        await fetch(endpoint + "/rooms")
             .then(json => json.json()
-                .then(data =>
-                    this.setState({rooms: data})
+                .then(data => {
+                        setRooms(data)
+                    }
                 )
             )
     }
 
-    createRoom = (room) => {
-        const url = this.state.endpoint + '/rooms';
+    function createRoom(room){
+        const url = endpoint + '/rooms';
 
         fetch(url, {
             method: 'POST',
@@ -66,19 +59,24 @@ export default class App extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "creator": room.userName,
+                "isPublic": room.isPublic,
+                "password": room.password,
                 "name": room.roomName,
                 "issueName": room.issueName,
                 "issueDescription": room.issueDescription,
                 "issueLink": room.issueLink,
             })
-        }).catch(function () {
+        }).then(res => {
+            res.json().then(json => {
+                history.push("/room/" + json.roomId)
+            })
+        }).catch(() => {
             console.log("error");
         });
     }
 
-    onCastVote = (roomId, vote) => {
-        const url = this.state.endpoint + '/room/' + roomId + '/vote/' + vote
+    function onCastVote(roomId, vote){
+        const url = endpoint + '/room/' + roomId + '/vote/' + vote
         console.log(url)
         fetch(url, {
             method: 'PUT',
@@ -87,34 +85,30 @@ export default class App extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "clientId": this.state.clientId,
+                "clientId": clientId,
             })
         }).catch(function () {
             console.log("error");
         });
     }
 
-    onEnterRoom = (roomId) => {
-        if (!this.state.clientId)
-            setTimeout(() => this.onEnterRoom(roomId), 10)
-        else {
-            const url = this.state.endpoint + '/room/' + roomId + '/client/' + this.state.clientId;
-            console.log("onEnterRoom: " + this.state.clientId)
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            }).catch(function () {
-                console.log("error");
-            });
-        }
+    function onEnterRoom(roomId){
+        const url = endpoint + '/room/' + roomId + '/client/' + clientId;
+        console.log("onEnterRoom: clientId: " + clientId + ", roomId: " + roomId)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).catch(function () {
+            console.log("error");
+        });
     }
 
-    onExitRoom = (roomId) => {
-        const url = this.state.endpoint + '/room/' + roomId + '/client/' + this.state.clientId;
-        this.setState({currentRoomUsers: null})
+    function onExitRoom(roomId){
+        const url = endpoint + '/room/' + roomId + '/client/' + clientId;
+        setCurrentRoom(null)
         console.log("onExitRoom: " + roomId)
         fetch(url, {
             method: 'DELETE',
@@ -127,32 +121,33 @@ export default class App extends Component {
         });
     }
 
-    render() {
-        console.log("rerendering App")
-        return (
-            <BrowserRouter>
-                <Header/>
-                <Switch>
-                    <Route
-                        exact
-                        path="/"
-                        render={() => <LandingPage
-                            createRoom={this.createRoom}
-                            rooms={this.state.rooms}/>}
-                    />
+    return (
+        <div>
+            <Header/>
+            <Switch>
+                <Route
+                    exact
+                    path="/"
+                    render={() => <LandingPage
+                        createRoom={createRoom}
+                        rooms={rooms}/>}
+                />
 
-                    <Route
-                        path="/room/:id"
-                        render={props => <Room
-                            users={this.state.currentRoomUsers}
-                            onEnter={this.onEnterRoom}
-                            onExit={this.onExitRoom}
-                            onCastVote={this.onCastVote}
-                            roomId={props.match.params.id}
-                        />}
-                    />
-                </Switch>
-            </BrowserRouter>
-        );
-    }
+                <Route
+                    path="/room/:id"
+                    render={props => clientId
+                        ? <Room
+                            room={currentRoom}
+                            users={currentRoom}
+                            onEnter={onEnterRoom}
+                            onExit={onExitRoom}
+                            onCastVote={onCastVote}
+                            roomId={props.match.params.id}/>
+                        : null
+                    }
+                />
+            </Switch>
+        </div>
+    )
+        ;
 }

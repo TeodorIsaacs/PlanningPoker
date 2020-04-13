@@ -40,11 +40,12 @@ app.get('/rooms', (req, res) => {
 })
 
 app.post('/rooms', (req, res) => {
-    database.createRoom(uniqid(), req.body)
+    let roomId = uniqid()
+    database.createRoom(roomId, req.body)
 
     emitMessage("RoomsChanged", database.getRooms())
 
-    res.sendStatus(200)
+    res.status(200).send({roomId: roomId})
 });
 
 app.post('/room/:roomId/client/:clientId', (req, res) => {
@@ -99,8 +100,8 @@ app.put('/room/:id/vote/:vote', (req, res) => {
 
         emitMessageToRoom(
             roomId,
-            "UpdatedVote",
-            database.getRoomUser(roomId, clientId)
+            "UpdatedRoom",
+            database.getRoomUsers(roomId)
         )
 
         res.sendStatus(200)

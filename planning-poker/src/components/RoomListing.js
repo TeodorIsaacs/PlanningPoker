@@ -15,10 +15,6 @@ export default function RoomListing(props) {
                 </div>
 
                 <div className="roomListingInfo">
-                    Created by: {props.room.creator}
-                </div>
-
-                <div className="roomListingInfo">
                     Active Users: {props.room.activeUsers.length}
                 </div>
             </div>

@@ -1,105 +1,108 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import "./CreateRoomForm.css"
 
-export default class CreateRoomForm extends Component {
+export default function CreateRoomForm(props) {
 
-    state = {
+    const initialState = {
         issueName: "",
         issueDescription: "",
         issueLink: "",
         isPublic: false,
         password: "",
-        roomName: "",
+        roomName: ""
+    };
+
+    const [
+        {issueName, issueDescription, issueLink, isPublic, password, roomName},
+        setState
+    ] = useState(initialState)
+
+    function clearState(){
+        setState({ ...initialState })
     }
 
-    onSubmit = (event) => {
+    function onChange(event) {
+        let { name, value } = event.target;
+        value = name === 'isPublic' ? event.target.checked : value;
+        setState(prevState => ({ ...prevState, [name]: value }));
+    }
+
+    function onSubmit(event) {
         event.preventDefault()
-        this.props.onSubmit(this.state)
+        props.onSubmit({issueName, issueDescription, issueLink, isPublic, password, roomName})
+        clearState()
     }
 
-    handleInputChange = (event) => {
-        const target = event.target;
-        const value = target.name === 'isPublic' ? target.checked : target.value;
-        const name = target.name;
+    return (
+        <div className="createRoomForm">
+            <form onSubmit={onSubmit}>
+                <label className="formLabel">
+                    Create a new poll
+                </label>
 
-        this.setState({
-            [name]: value
-        });
-    }
+                <input className="textFormInput issueNameInput"
+                       name="issueName"
+                       value={issueName}
+                       placeholder="Issue title"
+                       required
+                       onChange={onChange}
+                />
 
-    render() {
-        return (
-            <div className="createRoomForm">
-                <form onSubmit={this.onSubmit}>
-                    <label className="formLabel">
-                        Create a new poll
+                <input className="textFormInput"
+                       name="issueLink"
+                       value={issueLink}
+                       placeholder="Link to issue"
+                       onChange={onChange}
+                />
+
+                <textarea className="textFormInput issueDescriptionInput"
+                          name="issueDescription"
+                          value={issueDescription}
+                          placeholder="Description"
+                          onChange={onChange}
+                />
+
+                <div className="checkboxRow">
+                    <label className="makePublicLabel">Make room public</label>
+
+                    <label className="checkbox-label">
+                        <input
+                            className="isPublicCheckbox"
+                            name="isPublic"
+                            type="checkbox"
+                            value={isPublic}
+                            onChange={onChange}
+                        />
+                        <span className="checkbox-custom rectangular"/>
                     </label>
+                </div>
 
-                    <input className="textFormInput issueNameInput"
-                           name="issueName"
+                {isPublic &&
+                <div className="onPublicInputs">
+                    <input className="textFormInput"
+                           name="roomName"
                            type="text"
-                           value={this.state.issueName}
-                           placeholder="Issue title"
+                           value={roomName}
                            required
-                           onChange={this.handleInputChange}
+                           placeholder="Room Name"
+                           onChange={onChange}
                     />
 
                     <input className="textFormInput"
-                              name="issueLink"
-                              value={this.state.issueLink}
-                              placeholder="Link to issue"
-                              onChange={this.handleInputChange}
-                    />
-
-                    <textarea className="textFormInput issueDescriptionInput"
-                           name="issueDescription"
+                           name="password"
                            type="text"
-                           value={this.state.issueDescription}
-                           placeholder="Description"
-                           onChange={this.handleInputChange}
+                           value={password}
+                           placeholder="Password"
+                           onChange={onChange}
                     />
+                </div>
 
-                    <div className="checkboxRow">
-                        <label className="makePublicLabel">Make room public</label>
-
-                        <label className="checkbox-label">
-                            <input
-                                className="isPublicCheckbox"
-                                name="isPublic"
-                                type="checkbox"
-                                value={this.state.isPublic}
-                                onChange={this.handleInputChange}
-                            />
-                            <span className="checkbox-custom rectangular"/>
-                        </label>
-                    </div>
-
-                    {this.state.isPublic &&
-                    <div className="onPublicInputs">
-                        <input className="textFormInput"
-                               name="roomName"
-                               type="text"
-                               value={this.state.roomName}
-                               placeholder="Room Name"
-                               onChange={this.handleInputChange}
-                        />
-
-                        <input className="textFormInput"
-                               name="password"
-                               type="text"
-                               value={this.state.password}
-                               placeholder="Password"
-                               onChange={this.handleInputChange}
-                        />
-                    </div>
-
-                    }
-                    <input className="submitButton" type="submit" value="Submit"/>
-                </form>
-            </div>
-        );
-    }
+                }
+                <input className="submitButton" type="submit" value="Submit"/>
+            </form>
+        </div>
+    );
 }
 
 CreateRoomForm.propTypes = {

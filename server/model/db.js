@@ -57,7 +57,9 @@ class db {
     }
 
     getRooms() {
-        return this.rooms.map(room => ({
+        return this.rooms
+            .filter(room => room.isPublic === true)
+            .map(room => ({
                 id: room.id,
                 creator: room.creator,
                 name: room.name,

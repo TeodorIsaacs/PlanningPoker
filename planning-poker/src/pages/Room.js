@@ -1,45 +1,43 @@
-import React, {Component} from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import RoomUser from "../components/RoomUser";
 
-export default class Room extends Component {
+export default function Room(props) {
 
-    componentDidMount() {
-        this.props.onEnter(this.props.roomId)
-    }
+    useEffect(() => {
+        props.onEnter(props.roomId)
 
-    componentWillUnmount() {
-        this.props.onExit(this.props.roomId)
-    }
+        console.log(props)
 
-    render() {
-        console.log(this.props.users)
-        return (
-            <div>
-                {this.props.users
-                    ? this.props.users.map(user =>
-                        <RoomUser
-                            key={user.clientId}
-                            clientId={user.clientId}
-                            voted={user.voted}
-                        />)
-                    : ""
-                }
+        return () => props.onExit(props.roomId)
+    }, [])
 
-                {[1, 2, 3, 5, 8, 13].map(num =>
-                    <button
-                        onClick={() => this.props.onCastVote(this.props.roomId, num)}
-                        key={num}
-                    >
-                        {num}
-                    </button>
-                )}
-            </div>
-        )
-    }
+    return (
+        <div>
+            {props.users
+                ? props.users.map(user =>
+                    <RoomUser
+                        key={user.clientId}
+                        clientId={user.clientId}
+                        voted={user.voted}
+                    />)
+                : ""
+            }
+
+            {[1, 2, 3, 5, 8, 13].map(num =>
+                <button
+                    onClick={() => props.onCastVote(props.roomId, num)}
+                    key={num}
+                >
+                    {num}
+                </button>
+            )}
+        </div>
+    )
 }
 
 Room.prototypes = {
+    room: PropTypes.object.isRequired,
     users: PropTypes.arrayOf(
         PropTypes.shape({
             clientId: PropTypes.string,

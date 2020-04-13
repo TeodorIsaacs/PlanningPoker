@@ -9,5 +9,7 @@
 }
 
 .publicRooms {
-    width: 600px;
+    width: 40vw;
+    max-width: 500px;
+    min-width: 300px;
 }
