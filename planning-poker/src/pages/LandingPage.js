@@ -6,25 +6,11 @@ import "./LandingPage.css"
 
 export default class LandingPage extends Component {
 
-    state = {
-        userName: "",
-        roomName: "",
-    }
-
-    onSubmit = (userName, roomName) => {
-        this.props.createRoom(userName, roomName)
-        this.setState({userName: "", roomName: ""})
-    }
-
     render() {
         return (
             <div className="landingPage">
                 <CreateRoomForm
-                    onSubmit={() => this.onSubmit(this.state.userName, this.state.roomName)}
-                    userName={this.state.userName}
-                    roomName={this.state.roomName}
-                    onUsernameChanged={name => this.setState({userName: name})}
-                    onRoomNameChanged={name => this.setState({roomName: name})}
+                    onSubmit={this.props.createRoom}
                 />
                 <div className="publicRooms">
                     <p className="listTitle">Public rooms</p>

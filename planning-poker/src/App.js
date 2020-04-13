@@ -56,8 +56,7 @@ export default class App extends Component {
             )
     }
 
-    createRoom = (creatorName, roomName) => {
-        console.log(roomName + ", " + creatorName)
+    createRoom = (room) => {
         const url = this.state.endpoint + '/rooms';
 
         fetch(url, {
@@ -67,8 +66,11 @@ export default class App extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "creator": creatorName,
-                "name": roomName,
+                "creator": room.userName,
+                "name": room.roomName,
+                "issueName": room.issueName,
+                "issueDescription": room.issueDescription,
+                "issueLink": room.issueLink,
             })
         }).catch(function () {
             console.log("error");
