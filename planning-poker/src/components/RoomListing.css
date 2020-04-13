@@ -1,0 +1,21 @@
+.roomListingInfo {
+    width: 28%;
+}
+
+a {
+    text-decoration: none;
+    color: #282c34;
+}
+
+.roomListingItem {
+    background: #aab0c5;
+    width: calc(100% - 20px);
+    display: flex;
+    padding: 10px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.roomListingItem:hover {
+    background-color: #c9ccdc;
+}

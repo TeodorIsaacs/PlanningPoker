@@ -1,0 +1,13 @@
+.header {
+    background-color: #21242b;
+    height: 60px;
+    width: 100%;
+    line-height: 60px;
+}
+
+.headerText {
+    margin-left: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 40px;
+    color: #32c67b;
+}

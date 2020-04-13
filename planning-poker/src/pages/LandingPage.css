@@ -1,0 +1,13 @@
+.landingPage {
+    display: flex;
+    justify-content: center;
+}
+
+.listTitle {
+    color: #21242b;
+    font-size: 20px;
+}
+
+.publicRooms {
+    width: 600px;
+}

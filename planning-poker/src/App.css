@@ -1,0 +1,10 @@
+#root {
+  background: rgb(72, 80, 94);
+  height: 100%;
+  width: 100%;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}

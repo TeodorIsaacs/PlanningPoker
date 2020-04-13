@@ -1,0 +1,55 @@
+.createRoomForm form {
+    margin: 60px;
+    background: #aab0c5;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.createRoomForm label {
+    align-self: center;
+    font-size: 24px;
+    color: #0e2f20;
+}
+
+.submitButton {
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #2bd582;
+    color: #282c34;
+    border-width: 0;
+    border-radius: 3px;
+    margin-top: auto;
+}
+
+.submitButton:hover{
+    background-color: #32c67b;
+}
+
+.submitButton:focus {
+    outline: 0;
+}
+
+.textFormInput {
+    margin-top: 20px;
+    height: 40px;
+    background-color: #c9cadc;
+    border-radius: 2px;
+    color: #2d2d2d;
+    border-width: 0px;
+    text-align: left;
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+::placeholder {
+    color: #585c65;
+}
+
+input:focus {
+    outline: 0;
+}
