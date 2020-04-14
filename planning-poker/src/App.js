@@ -30,12 +30,13 @@ export default function App() {
     }
 
     function onReceiveClientId(id){
-        console.log("onReceiveClientId" + clientId)
+        console.log("onReceiveClientId")
         setClientId(id)
     }
 
     function onReceiveRoomUpdate(room) {
-        console.log("onReceiveRoomUpdate, room: ")
+        console.log("onReceiveRoomUpdate")
+        console.log(room)
         setCurrentRoom(room)
     }
 
@@ -122,7 +123,7 @@ export default function App() {
     }
 
     return (
-        <div>
+        <div className="app">
             <Header/>
             <Switch>
                 <Route
@@ -138,11 +139,12 @@ export default function App() {
                     render={props => clientId
                         ? <Room
                             room={currentRoom}
-                            users={currentRoom}
                             onEnter={onEnterRoom}
                             onExit={onExitRoom}
                             onCastVote={onCastVote}
-                            roomId={props.match.params.id}/>
+                            roomId={props.match.params.id}
+                            clientId={clientId}
+                        />
                         : null
                     }
                 />

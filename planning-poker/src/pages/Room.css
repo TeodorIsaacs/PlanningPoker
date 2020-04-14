@@ -1,0 +1,24 @@
+.room {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.roomUsers {
+    display: flex;
+    flex-direction: row;
+    margin: 200px 20% 50px;
+    justify-content: space-around;
+    width: 60%;
+}
+
+.voting {
+    vertical-align: bottom;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    background-color: #edf5fc;
+    border-radius: 30px;
+    margin-left: 60px;
+    margin-right: 60px;
+}

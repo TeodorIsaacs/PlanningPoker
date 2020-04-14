@@ -1,0 +1,33 @@
+.emoji {
+    font-size: 60px;
+}
+
+.roomUser {
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.votedIndicator {
+    text-align: center;
+    padding-top: 20px;
+    border-radius: 5px;
+    background-color: #32c67b;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 0;
+    color: #312828;
+    margin: auto;
+    height: 40px;
+    width: 40px;
+    font-size: 15px;
+    font-family: "Roboto";
+    font-weight: bolder;
+}
+
+.isVotingIndicator {
+    height: 20px;
+    width: 100%;
+    padding-top: 40px;
+    text-align: center;
+}

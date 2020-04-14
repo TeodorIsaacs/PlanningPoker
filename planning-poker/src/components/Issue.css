@@ -1,0 +1,25 @@
+.issueCard {
+    border-radius: 5px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 240px;
+    width: 400px;
+    background-color: #edf5fc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.issueCard:hover {
+    background-color: #d0d8e5;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.issueContent {
+    height: 200px;
+    width: 360px;
+    padding: 20px;
+}
+
+.issueName {
+    margin-block-start: 0em;
+}

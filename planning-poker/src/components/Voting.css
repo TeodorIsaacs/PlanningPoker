@@ -1,0 +1,50 @@
+.voteButtonContainer {
+    margin-left: 20%;
+    margin-right: 20%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.selectedVoteButton {
+    border-color: #e83487;
+    border-radius: 4px;
+}
+
+.voteButton {
+    border-radius: 5px;
+    background-color: #32c67b;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 0;
+    color: #312828;
+    margin: auto;
+    height: 120px;
+    width: 80px;
+    font-size: 30px;
+    font-family: "Roboto";
+    font-weight: bolder;
+}
+
+.voteButton:hover{
+    cursor: pointer;
+    background-color: #2baa6b;
+}
+
+.voteButton:focus {
+    outline: 0;
+}
+
+.votingInstructions {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.userEmoji {
+    margin-top: 5vh;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+}

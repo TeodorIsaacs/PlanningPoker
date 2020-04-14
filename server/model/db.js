@@ -20,7 +20,7 @@ class db {
         ))
     }
 
-    createUser(clientId, socket){
+    createUser(clientId, socket) {
         this.users.push(new User(clientId, socket))
     }
 
@@ -40,7 +40,7 @@ class db {
         } else throw Error("no such room")
     }
 
-    removeUser(clientId){
+    removeUser(clientId) {
         this.users.splice(this.users.indexOf(clientId), 1)
 
         this.rooms.forEach(room =>
@@ -59,21 +59,7 @@ class db {
     getRooms() {
         return this.rooms
             .filter(room => room.isPublic === true)
-            .map(room => ({
-                id: room.id,
-                creator: room.creator,
-                name: room.name,
-                issueName: room.issueName,
-                issueDescription: room.issueDescription,
-                issueLink: room.issueLink,
-                activeUsers: room.activeUsers
-                    .map(user => ({
-                            clientId: user.id,
-                            voted: user.voted
-                        })
-                    ),
-            })
-        )
+            .map(room => this.convertToRoomDTO(room))
     }
 
     getRoomUsers(roomId) {
@@ -107,8 +93,29 @@ class db {
         return this.rooms.find(room => room.id === roomId)
     }
 
+    getRoomDTO(roomId){
+        return this.convertToRoomDTO(this.getRoom(roomId))
+    }
+
     getUser(clientId) {
         return this.users.find(user => user.id === clientId)
+    }
+
+    convertToRoomDTO(room) {
+        return {
+            id: room.id,
+            creator: room.creator,
+            name: room.name,
+            issueName: room.issueName,
+            issueDescription: room.issueDescription,
+            issueLink: room.issueLink,
+            activeUsers: room.activeUsers
+                .map(user => ({
+                        clientId: user.id,
+                        voted: user.voted
+                    })
+                ),
+        }
     }
 }
 

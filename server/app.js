@@ -55,11 +55,7 @@ app.post('/room/:roomId/client/:clientId', (req, res) => {
         console.log("Adding user to room: " + roomId + ", with client id:" + clientId)
         database.addUserToRoom(clientId, roomId)
 
-        emitMessageToRoom(
-            roomId,
-            "UpdatedRoom",
-            database.getRoomUsers(roomId)
-        )
+        emitUpdateRoom(roomId)
 
         res.sendStatus(200)
     } catch (e) {
@@ -75,11 +71,7 @@ app.delete('/room/:roomId/client/:clientId', (req, res) => {
         console.log("Removing user from room: " + roomId + ", with client id:" + clientId)
         database.removeUserFromRoom(roomId, clientId)
 
-        emitMessageToRoom(
-            roomId,
-            "UpdatedRoom",
-            database.getRoomUsers(roomId)
-        )
+        emitUpdateRoom(roomId)
 
         res.sendStatus(200)
     } catch (e) {
@@ -98,11 +90,7 @@ app.put('/room/:id/vote/:vote', (req, res) => {
 
         database.giveUserInRoomVote(clientId, roomId, vote)
 
-        emitMessageToRoom(
-            roomId,
-            "UpdatedRoom",
-            database.getRoomUsers(roomId)
-        )
+        emitUpdateRoom(roomId)
 
         res.sendStatus(200)
     } catch (e) {
@@ -124,6 +112,13 @@ io.on("connection", socket => {
         console.log("Client disconnected")
     });
 });
+
+function emitUpdateRoom(roomId) {
+    emitMessageToRoom(roomId,
+        "UpdatedRoom",
+        database.getRoomDTO(roomId)
+    )
+}
 
 function emitMessageToRoom(roomId, eventName, data) {
     database.getRoomSockets(roomId).forEach(socket => {

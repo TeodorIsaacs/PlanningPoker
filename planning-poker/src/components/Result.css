@@ -1,0 +1,30 @@
+.result {
+    position: absolute;
+    background-color: #32c67b;
+    top: 400px;
+    height: auto;
+    width: 400px;
+    margin-left: auto;
+    text-align: center;
+    margin-right: auto;
+    color: #312828;
+    left: calc(50% - 200px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.resultTitle {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.resultDescription {
+    font-size: 30px;
+    margin: 20px;
+}
+
+.resultScore {
+    font-size: 60px;
+    font-weight: bolder;
+    margin: 20px;
+}
