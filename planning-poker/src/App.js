@@ -17,20 +17,22 @@ export default function App() {
     const history = useHistory();
 
     useEffect(() => {
-        const socket = socketIOClient(endpoint);
+        const socket = socketIOClient(endpoint + "?clientId=" + window.sessionStorage.getItem("clientId"))
+
         socket.on("RoomsChanged", rooms => onReceiveRooms(rooms));
         socket.on("ReceiveClientID", id => onReceiveClientId(id))
         socket.on("UpdatedRoom", room => onReceiveRoomUpdate(room))
         getRooms()
     }, [])
 
-    function onReceiveRooms(rooms){
+    function onReceiveRooms(rooms) {
         console.log("onReceiveRooms")
         setRooms(rooms)
     }
 
-    function onReceiveClientId(id){
+    function onReceiveClientId(id) {
         console.log("onReceiveClientId")
+        window.sessionStorage.setItem("clientId", id);
         setClientId(id)
     }
 
@@ -50,7 +52,7 @@ export default function App() {
             )
     }
 
-    function createRoom(room){
+    function createRoom(room) {
         const url = endpoint + '/rooms';
 
         fetch(url, {
@@ -76,7 +78,7 @@ export default function App() {
         });
     }
 
-    function onCastVote(roomId, vote){
+    function onCastVote(roomId, vote) {
         const url = endpoint + '/room/' + roomId + '/vote/' + vote
         console.log(url)
         fetch(url, {
@@ -93,7 +95,7 @@ export default function App() {
         });
     }
 
-    function onEnterRoom(roomId){
+    function onEnterRoom(roomId) {
         const url = endpoint + '/room/' + roomId + '/client/' + clientId;
         console.log("onEnterRoom: clientId: " + clientId + ", roomId: " + roomId)
         fetch(url, {
@@ -107,7 +109,7 @@ export default function App() {
         });
     }
 
-    function onExitRoom(roomId){
+    function onExitRoom(roomId) {
         const url = endpoint + '/room/' + roomId + '/client/' + clientId;
         setCurrentRoom(null)
         console.log("onExitRoom: " + roomId)

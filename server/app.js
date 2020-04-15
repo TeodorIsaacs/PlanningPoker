@@ -100,12 +100,14 @@ app.put('/room/:id/vote/:vote', (req, res) => {
 })
 
 io.on("connection", socket => {
-    let clientId = uniqid()
+    let receivedClientId = socket.handshake.query.clientId
+    let clientId = receivedClientId ? receivedClientId : uniqid()
     database.createUser(clientId, socket)
 
     socket.emit("ReceiveClientID", clientId)
 
     console.log("client connected")
+    console.log(socket)
 
     socket.on("disconnect", () => {
         database.removeUser(clientId)
