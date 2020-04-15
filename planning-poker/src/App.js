@@ -4,7 +4,7 @@ import "./App.css"
 import {Route, Switch, useHistory} from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Room from "./pages/Room";
-import Header from "./components/Header";
+import Header from "./components/general/Header";
 
 export default function App() {
 

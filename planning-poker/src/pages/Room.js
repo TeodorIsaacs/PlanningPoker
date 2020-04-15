@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import Issue from "../components/Issue";
-import Voting from "../components/Voting";
+import Issue from "../components/room/Issue";
+import Voting from "../components/room/Voting";
 import "./Room.css"
-import RoomUsers from "../components/RoomUsers";
-import Result from "../components/Result";
+import RoomUsers from "../components/room/RoomUsers";
+import Result from "../components/room/Result";
 
 export default function Room(props) {
     const [allVoted, setAllVoted] = useState(false)

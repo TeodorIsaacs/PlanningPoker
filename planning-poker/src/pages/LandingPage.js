@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import CreateRoomForm from "../components/CreateRoomForm";
-import RoomList from "../components/RoomList";
+import CreateRoomForm from "../components/landingpage/CreateRoomForm";
+import RoomList from "../components/landingpage/RoomList";
 import "./LandingPage.css"
 
 export default class LandingPage extends Component {
