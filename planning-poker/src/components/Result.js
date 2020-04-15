@@ -6,8 +6,8 @@ export default function Result(props){
     return (
         <div className="result">
             <p className="resultTitle">Voting completed</p>
-            <p className="resultDescription">Your average is</p>
-            <p className="resultScore">{props.result}</p>
+            <p className="resultDescription">Your average was</p>
+            <p className="resultScore">{props.result.toFixed(1)}</p>
         </div>
     )
 }

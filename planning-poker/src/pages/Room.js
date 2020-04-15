@@ -16,18 +16,20 @@ export default function Room(props) {
         return () => props.onExit(props.roomId)
     }, [])
 
-    function getAverageScore(users) {
-        let votes = users.map(user => parseInt(user.voted || 0))
-        return votes.reduce((a, b) => a + b, 0) / votes.length
-    }
-
     useEffect(() => {
         if (props.room && props.room.activeUsers) {
-            setAllVoted(props.room.activeUsers.find(user => user.voted === undefined) === undefined)
+            let haveAllUsersVoted = props.room.activeUsers
+                .find(user => user.voted === undefined) === undefined
+            setAllVoted(haveAllUsersVoted)
 
             setAverageScore(getAverageScore(props.room.activeUsers))
         }
     }, [props.room])
+
+    function getAverageScore(users) {
+        let votes = users.map(user => parseInt(user.voted || 0))
+        return votes.reduce((a, b) => a + b, 0) / votes.length
+    }
 
     return (
         props.room

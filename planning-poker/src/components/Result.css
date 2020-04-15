@@ -1,7 +1,7 @@
 .result {
     position: absolute;
     background-color: #32c67b;
-    top: 400px;
+    top: 780px;
     height: auto;
     width: 400px;
     margin-left: auto;
@@ -9,7 +9,7 @@
     margin-right: auto;
     color: #312828;
     left: calc(50% - 200px);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 10px 71px 0 rgba(0,0,0,0.79);
 }
 
 .resultTitle {
