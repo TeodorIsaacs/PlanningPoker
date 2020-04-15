@@ -2,25 +2,26 @@ import React from "react";
 import PropTypes from 'prop-types';
 import RoomUser from "./RoomUser";
 
-export default function RoomUsers(props){
+export default function RoomUsers(props) {
 
     return (
         <div className="roomUsers">
             {props.activeUsers
-                ? props.activeUsers.map(user =>
-                    <RoomUser
-                        key={user.clientId}
-                        clientId={user.clientId}
-                        voted={user.voted}
-                        emoji={user.emoji}
-                        isVotingComplete={props.allVoted}
-                    />)
+                ? props.activeUsers
+                    .sort((a, b) => a.clientId.localeCompare(b.clientId))
+                    .map(user =>
+                        <RoomUser
+                            key={user.clientId}
+                            clientId={user.clientId}
+                            voted={user.voted}
+                            emoji={user.emoji}
+                            isVotingComplete={props.allVoted}
+                        />)
                 : ""
             }
         </div>
     )
 }
-
 
 RoomUsers.propTypes = {
     activeUsers: PropTypes.arrayOf(
