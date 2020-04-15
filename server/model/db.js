@@ -13,7 +13,6 @@ class db {
             reqBody.creator,
             reqBody.name,
             reqBody.isPublic,
-            reqBody.password,
             reqBody.issueName,
             reqBody.issueDescription,
             reqBody.issueLink,

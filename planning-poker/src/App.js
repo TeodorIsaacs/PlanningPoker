@@ -78,7 +78,6 @@ export default function App() {
             },
             body: JSON.stringify({
                 "isPublic": room.isPublic,
-                "password": room.password,
                 "name": room.roomName,
                 "issueName": room.issueName,
                 "issueDescription": room.issueDescription,

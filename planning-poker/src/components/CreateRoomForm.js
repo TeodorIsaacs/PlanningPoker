@@ -9,28 +9,27 @@ export default function CreateRoomForm(props) {
         issueDescription: "",
         issueLink: "",
         isPublic: false,
-        password: "",
         roomName: ""
     };
 
     const [
-        {issueName, issueDescription, issueLink, isPublic, password, roomName},
+        {issueName, issueDescription, issueLink, isPublic, roomName},
         setState
     ] = useState(initialState)
 
-    function clearState(){
-        setState({ ...initialState })
+    function clearState() {
+        setState({...initialState})
     }
 
     function onChange(event) {
-        let { name, value } = event.target;
+        let {name, value} = event.target;
         value = name === 'isPublic' ? event.target.checked : value;
-        setState(prevState => ({ ...prevState, [name]: value }));
+        setState(prevState => ({...prevState, [name]: value}));
     }
 
     function onSubmit(event) {
         event.preventDefault()
-        props.onSubmit({issueName, issueDescription, issueLink, isPublic, password, roomName})
+        props.onSubmit({issueName, issueDescription, issueLink, isPublic, roomName})
         clearState()
     }
 
@@ -86,14 +85,6 @@ export default function CreateRoomForm(props) {
                            value={roomName}
                            required
                            placeholder="Room Name"
-                           onChange={onChange}
-                    />
-
-                    <input className="textFormInput"
-                           name="password"
-                           type="text"
-                           value={password}
-                           placeholder="Password"
                            onChange={onChange}
                     />
                 </div>

@@ -1,10 +1,9 @@
 class Room {
-    constructor(id, creator, name, isPublic, password, issueName, issueDescription, issueLink,) {
+    constructor(id, creator, name, isPublic, issueName, issueDescription, issueLink,) {
         this.id = id
         this.creator = creator
         this.name = name
         this.isPublic = isPublic
-        this.password = password
         this.activeUsers = []
         this.issueName = issueName
         this.issueDescription = issueDescription
