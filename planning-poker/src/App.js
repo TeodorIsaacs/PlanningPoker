@@ -130,6 +130,7 @@ export default function App() {
     function exitRoom(roomId) {
         const url = endpoint + '/room/' + roomId + '/client/' + clientId;
         setCurrentRoom(null)
+        setRoomId(null)
         console.log("onExitRoom: " + roomId)
         fetch(url, {
             method: 'DELETE',
