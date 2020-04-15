@@ -11,6 +11,8 @@ export default function App() {
     const [rooms, setRooms] = useState([])
     const [clientId, setClientId] = useState(null)
     const [currentRoom, setCurrentRoom] = useState(null)
+    const [roomId, setRoomId] = useState(null)
+    const [socketId, setSocketId] = useState(null)
 
     const endpoint = "http://127.0.0.1:4001"
 
@@ -19,21 +21,35 @@ export default function App() {
     useEffect(() => {
         const socket = socketIOClient(endpoint + "?clientId=" + window.sessionStorage.getItem("clientId"))
 
-        socket.on("RoomsChanged", rooms => onReceiveRooms(rooms));
-        socket.on("ReceiveClientID", id => onReceiveClientId(id))
+        socket.on("RoomsChanged", rooms => onReceiveRooms(rooms))
+        socket.on("ReceiveConnection", data => onReceiveConnection(data.clientId, data.socketId))
         socket.on("UpdatedRoom", room => onReceiveRoomUpdate(room))
+
         getRooms()
     }, [])
+
+    useEffect(() => {
+        if (clientId && roomId) {
+            enterRoom(roomId)
+                .then(() => {
+                    let persistedVote = window.sessionStorage.getItem("vote")
+                    if (persistedVote) {
+                        castVote(roomId, persistedVote)
+                    }
+                })
+        }
+    }, [clientId, roomId, socketId])
 
     function onReceiveRooms(rooms) {
         console.log("onReceiveRooms")
         setRooms(rooms)
     }
 
-    function onReceiveClientId(id) {
-        console.log("onReceiveClientId")
-        window.sessionStorage.setItem("clientId", id);
-        setClientId(id)
+    function onReceiveConnection(clientId, socketId) {
+        console.log("onReceiveClientId: " + clientId)
+        window.sessionStorage.setItem("clientId", clientId);
+        setClientId(clientId)
+        setSocketId(socketId)
     }
 
     function onReceiveRoomUpdate(room) {
@@ -77,9 +93,10 @@ export default function App() {
         });
     }
 
-    function onCastVote(roomId, vote) {
+    function castVote(roomId, vote) {
         const url = endpoint + '/room/' + roomId + '/vote/' + vote
         console.log(url)
+
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -89,15 +106,18 @@ export default function App() {
             body: JSON.stringify({
                 "clientId": clientId,
             })
+        }).then(() => {
+            window.sessionStorage.setItem("vote", vote)
         }).catch(function () {
             console.log("error");
         });
     }
 
-    function onEnterRoom(roomId) {
+    async function enterRoom(roomId) {
         const url = endpoint + '/room/' + roomId + '/client/' + clientId;
         console.log("onEnterRoom: clientId: " + clientId + ", roomId: " + roomId)
-        fetch(url, {
+
+        await fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -108,7 +128,7 @@ export default function App() {
         });
     }
 
-    function onExitRoom(roomId) {
+    function exitRoom(roomId) {
         const url = endpoint + '/room/' + roomId + '/client/' + clientId;
         setCurrentRoom(null)
         console.log("onExitRoom: " + roomId)
@@ -118,6 +138,8 @@ export default function App() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
+        }).then(() => {
+            window.sessionStorage.removeItem("vote")
         }).catch(function () {
             console.log("error");
         });
@@ -140,9 +162,9 @@ export default function App() {
                     render={props => clientId
                         ? <Room
                             room={currentRoom}
-                            onEnter={onEnterRoom}
-                            onExit={onExitRoom}
-                            onCastVote={onCastVote}
+                            onEnter={setRoomId}
+                            onExit={exitRoom}
+                            onCastVote={castVote}
                             roomId={props.match.params.id}
                             clientId={clientId}
                         />

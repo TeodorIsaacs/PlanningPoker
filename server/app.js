@@ -106,7 +106,7 @@ io.on("connection", socket => {
 
     database.createUser(clientId, socket)
 
-    socket.emit("ReceiveClientID", clientId)
+    socket.emit("ReceiveConnection", {clientId: clientId, socketId: socket.id})
 
     console.log("client connected: " + clientId)
 
