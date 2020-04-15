@@ -27,8 +27,10 @@ class db {
     addUserToRoom(clientId, roomId) {
         if (this.getRoom(roomId)) {
             if (this.getUser(clientId)) {
-                this.getRoom(roomId).addUser(this.getUser(clientId))
-                this.getUser(clientId).enterRoom(roomId)
+                if (!this.getRoomUsers(roomId).find(user => user.clientId === clientId)) {
+                    this.getRoom(roomId).addUser(this.getUser(clientId))
+                    this.getUser(clientId).enterRoom(roomId)
+                } else throw Error("user already in room")
             } else throw Error("no such user")
         } else throw Error("no such room")
     }
@@ -43,7 +45,7 @@ class db {
     }
 
     removeUser(clientId) {
-        this.users.splice(this.users.indexOf(clientId), 1)
+        this.users.splice(this.users.indexOf(this.getUser(clientId)), 1)
 
         this.rooms.forEach(room =>
             room.removeUser(clientId)
@@ -58,7 +60,7 @@ class db {
         } else throw Error("no such room")
     }
 
-    getRooms() {
+    getPublicRoomDTOs() {
         return this.rooms
             .filter(room => room.isPublic === true)
             .map(room => this.convertToRoomDTO(room))
@@ -66,10 +68,6 @@ class db {
 
     getRoomUsers(roomId) {
         return this.getRoom(roomId).activeUsers
-            .map(user => ({
-                clientId: user.id,
-                voted: user.voted
-            }))
     }
 
     getRoomSockets(roomId) {
@@ -95,6 +93,10 @@ class db {
 
     getUsers() {
         return this.users
+    }
+
+    getRooms() {
+        return this.rooms
     }
 
     getRoom(roomId) {

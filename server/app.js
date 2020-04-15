@@ -36,14 +36,14 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 app.get('/rooms', (req, res) => {
-    res.send(database.getRooms())
+    res.send(database.getPublicRoomDTOs())
 })
 
 app.post('/rooms', (req, res) => {
     let roomId = uniqid()
     database.createRoom(roomId, req.body)
 
-    emitMessage("RoomsChanged", database.getRooms())
+    emitMessage("RoomsChanged", database.getPublicRoomDTOs())
 
     res.status(200).send({roomId: roomId})
 });
@@ -104,18 +104,15 @@ io.on("connection", socket => {
 
     let clientId = (receivedClientId === "null") ? uniqid() : receivedClientId
 
-    if (database.getUser(clientId)){
-        database.removeUser(clientId)
-    }
-
     database.createUser(clientId, socket)
 
     socket.emit("ReceiveClientID", clientId)
 
-    console.log("client connected")
+    console.log("client connected: " + clientId)
 
     socket.on("disconnect", () => {
         try {
+            console.log("client: " + clientId + " disconnected")
             let userCurrentRoom = database.getRoomFromClientId(clientId)
             database.removeUser(clientId)
             if (userCurrentRoom) {
@@ -123,8 +120,8 @@ io.on("connection", socket => {
             }
         } catch (e) {
             console.log(e)
+            database.removeUser(clientId)
         }
-        console.log("Client disconnected")
     });
 });
 
