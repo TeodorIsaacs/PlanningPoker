@@ -38,7 +38,6 @@ export default function App() {
 
     function onReceiveRoomUpdate(room) {
         console.log("onReceiveRoomUpdate")
-        console.log(room)
         setCurrentRoom(room)
     }
 

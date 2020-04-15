@@ -16,16 +16,16 @@ export default function Room(props) {
         return () => props.onExit(props.roomId)
     }, [])
 
+    function getAverageScore(users) {
+        let votes = users.map(user => parseInt(user.voted || 0))
+        return votes.reduce((a, b) => a + b, 0) / votes.length
+    }
+
     useEffect(() => {
         if (props.room && props.room.activeUsers) {
             setAllVoted(props.room.activeUsers.find(user => user.voted === undefined) === undefined)
 
-            let avg = props.room.activeUsers.reduce((a, b) =>
-                (a.voted ? parseInt(a.voted) : 0) +
-                (b.voted ? parseInt(b.voted) : 0)
-                , 0
-            )
-            setAverageScore(avg)
+            setAverageScore(getAverageScore(props.room.activeUsers))
         }
     }, [props.room])
 
@@ -57,7 +57,7 @@ export default function Room(props) {
                     roomId={props.roomId}
                     emoji={generateRandomEmoji(props.clientId)}
                 />
-         </div>
+            </div>
             : <p>loading...</p>
     )
 }
