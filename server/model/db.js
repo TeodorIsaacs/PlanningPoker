@@ -88,7 +88,6 @@ class db {
     }
 
     getRoomFromClientId(clientId) {
-        console.log(this.users)
         if (this.getUser(clientId)) {
             return this.getUser(clientId).currentRoom
         } else throw Error("no such user")

@@ -104,6 +104,10 @@ io.on("connection", socket => {
 
     let clientId = (receivedClientId === "null") ? uniqid() : receivedClientId
 
+    if (database.getUser(clientId)){
+        database.removeUser(clientId)
+    }
+
     database.createUser(clientId, socket)
 
     socket.emit("ReceiveClientID", clientId)
@@ -111,14 +115,14 @@ io.on("connection", socket => {
     console.log("client connected")
 
     socket.on("disconnect", () => {
-        let userCurrentRoom = database.getRoomFromClientId(clientId)
-        database.removeUser(clientId)
-        if (userCurrentRoom) {
-            try {
+        try {
+            let userCurrentRoom = database.getRoomFromClientId(clientId)
+            database.removeUser(clientId)
+            if (userCurrentRoom) {
                 emitUpdateRoom(userCurrentRoom)
-            } catch (e) {
-                console.log(e)
             }
+        } catch (e) {
+            console.log(e)
         }
         console.log("Client disconnected")
     });
