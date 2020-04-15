@@ -28,6 +28,7 @@ class db {
         if (this.getRoom(roomId)) {
             if (this.getUser(clientId)) {
                 this.getRoom(roomId).addUser(this.getUser(clientId))
+                this.getUser(clientId).enterRoom(roomId)
             } else throw Error("no such user")
         } else throw Error("no such room")
     }
@@ -36,6 +37,7 @@ class db {
         if (this.getRoom(roomId)) {
             if (this.getUser(clientId)) {
                 this.getRoom(roomId).removeUser(clientId)
+                this.getUser(clientId).exitRoom()
             } else throw Error("no such user")
         } else throw Error("no such room")
     }
@@ -85,6 +87,13 @@ class db {
         } else return null
     }
 
+    getRoomFromClientId(clientId) {
+        console.log(this.users)
+        if (this.getUser(clientId)) {
+            return this.getUser(clientId).currentRoom
+        } else throw Error("no such user")
+    }
+
     getUsers() {
         return this.users
     }
@@ -93,7 +102,7 @@ class db {
         return this.rooms.find(room => room.id === roomId)
     }
 
-    getRoomDTO(roomId){
+    getRoomDTO(roomId) {
         return this.convertToRoomDTO(this.getRoom(roomId))
     }
 

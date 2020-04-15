@@ -101,16 +101,25 @@ app.put('/room/:id/vote/:vote', (req, res) => {
 
 io.on("connection", socket => {
     let receivedClientId = socket.handshake.query.clientId
-    let clientId = receivedClientId ? receivedClientId : uniqid()
+
+    let clientId = (receivedClientId === "null") ? uniqid() : receivedClientId
+
     database.createUser(clientId, socket)
 
     socket.emit("ReceiveClientID", clientId)
 
     console.log("client connected")
-    console.log(socket)
 
     socket.on("disconnect", () => {
+        let userCurrentRoom = database.getRoomFromClientId(clientId)
         database.removeUser(clientId)
+        if (userCurrentRoom) {
+            try {
+                emitUpdateRoom(userCurrentRoom)
+            } catch (e) {
+                console.log(e)
+            }
+        }
         console.log("Client disconnected")
     });
 });
