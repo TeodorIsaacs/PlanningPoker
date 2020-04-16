@@ -5,6 +5,7 @@ import {Route, Switch, useHistory} from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Room from "./pages/Room";
 import Header from "./components/general/Header";
+import ErrorComponent from "./components/general/ErrorComponent";
 
 export default function App() {
 
@@ -122,9 +123,14 @@ export default function App() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
-        }).catch(function () {
-            console.log("error");
-        });
+        }).then(res => {
+            if (res.status !== 200) {
+                history.replace("/404")
+            }
+        }).catch(e => {
+                console.log(e)
+            }
+        )
     }
 
     function exitRoom(roomId) {
@@ -159,8 +165,8 @@ export default function App() {
 
                 <Route
                     path="/room/:id"
-                    render={props => clientId
-                        ? <Room
+                    render={props =>
+                        clientId && <Room
                             room={currentRoom}
                             onEnter={setRoomId}
                             onExit={exitRoom}
@@ -168,8 +174,13 @@ export default function App() {
                             roomId={props.match.params.id}
                             clientId={clientId}
                         />
-                        : null
                     }
+                />
+
+                <Route
+                    render={() => (
+                        <ErrorComponent errorCode={404}/>
+                    )}
                 />
             </Switch>
         </div>

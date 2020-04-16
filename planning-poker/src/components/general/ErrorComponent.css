@@ -1,0 +1,21 @@
+.error-component {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.error-code {
+    color: #32c67b;
+    font-size: calc(30px  + 8vw);
+    margin: auto;
+}
+
+.error-title {
+    color: #eee;
+    font-size: calc(10px + 1.5vw);
+    margin: auto;
+}
+
+.error-text {
+    color: #eee;
+    font-size: calc(7px + 1vw);
+}

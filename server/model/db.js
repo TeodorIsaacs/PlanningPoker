@@ -103,7 +103,9 @@ class db {
     }
 
     getRoomDTO(roomId) {
-        return this.convertToRoomDTO(this.getRoom(roomId))
+        if (this.getRoom(roomId)) {
+            return this.convertToRoomDTO(this.getRoom(roomId))
+        } else throw Error("no such room")
     }
 
     getUser(clientId) {

@@ -32,8 +32,7 @@ export default function Room(props) {
     }
 
     return (
-        props.room
-            ? <div className="room">
+        props.room && <div className="room">
                 <Issue
                     name={props.room.issueName}
                     description={props.room.issueDescription}
@@ -60,7 +59,6 @@ export default function Room(props) {
                     emoji={generateRandomEmoji(props.clientId)}
                 />
             </div>
-            : <p>loading...</p>
     )
 }
 

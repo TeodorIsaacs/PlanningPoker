@@ -48,6 +48,14 @@ app.post('/rooms', (req, res) => {
     res.status(200).send({roomId: roomId})
 });
 
+app.get('/room/:roomId', (req, res) => {
+    try {
+        res.send(database.getRoomDTO(req.params.roomId))
+    } catch (e) {
+        res.status(404).send(e)
+    }
+})
+
 app.post('/room/:roomId/client/:clientId', (req, res) => {
     let roomId = req.params.roomId
     let clientId = req.params.clientId
