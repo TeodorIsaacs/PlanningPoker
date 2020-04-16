@@ -42,30 +42,27 @@ export default function App() {
     }, [clientId, roomId, socketId])
 
     function onReceiveRooms(rooms) {
-        console.log("onReceiveRooms")
         setRooms(rooms)
     }
 
     function onReceiveConnection(clientId, socketId) {
-        console.log("onReceiveClientId: " + clientId)
         window.sessionStorage.setItem("clientId", clientId);
         setClientId(clientId)
         setSocketId(socketId)
     }
 
     function onReceiveRoomUpdate(room) {
-        console.log("onReceiveRoomUpdate")
         setCurrentRoom(room)
     }
 
     async function getRooms() {
         await fetch(endpoint + "/rooms")
-            .then(json => json.json()
-                .then(data => {
-                        setRooms(data)
-                    }
-                )
-            )
+            .then(json => json.json().then(data => {
+                    setRooms(data)
+                })
+            ).catch(e => {
+                console.log(e)
+            })
     }
 
     function createRoom(room) {
@@ -88,8 +85,8 @@ export default function App() {
             res.json().then(json => {
                 history.push("/room/" + json.roomId)
             })
-        }).catch(() => {
-            console.log("error");
+        }).catch(e => {
+            console.log(e);
         });
     }
 
@@ -108,8 +105,8 @@ export default function App() {
             })
         }).then(() => {
             window.sessionStorage.setItem("vote", vote)
-        }).catch(function () {
-            console.log("error");
+        }).catch(e => {
+            console.log(e);
         });
     }
 
@@ -146,8 +143,8 @@ export default function App() {
             }
         }).then(() => {
             window.sessionStorage.removeItem("vote")
-        }).catch(function () {
-            console.log("error");
+        }).catch(e => {
+            console.log(e);
         });
     }
 
